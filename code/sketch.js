@@ -104,8 +104,8 @@ function mouseDragged() {
     else{
         if(clickedCirc != -1 ){
             // Means User trying to move a circle
-            ourGraph.Graph[clickedCirc].x = mouseX;
-            ourGraph.Graph[clickedCirc].y = mouseY;
+            ourGraph.Graph[clickedCirc].x = mouseX - windowPos[0];
+            ourGraph.Graph[clickedCirc].y = mouseY - windowPos[1];
     
         }
     }
