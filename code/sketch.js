@@ -1,5 +1,7 @@
 let ourGraph = new graph();
 let ourStack = [];
+let clickedCirc = -1; // Clicked Circle
+
 /*
 The stack will hold to tracking action [It will be used to undo and redo] 
 */
@@ -12,7 +14,7 @@ function setup() {
 }
 
 function mousePressed() {
-    let clickedCirc = -1;
+    clickedCirc = -1;
     for(let i = 0; i < ourGraph.Graph.length; i++){
         let nod = ourGraph.Graph[i];
         let distance = dist(nod.x,nod.y,mouseX,mouseY);
@@ -79,8 +81,21 @@ function keyPressed() {
     }
     lastKeyPressed = keyCode;
 }
-  
+
+function mouseDragged() {
+    /*This is the code for moving the window or a circle*/
+    if(clickedCirc != -1){
+        // Means User trying to move a circle
+        ourGraph.Graph[clickedCirc].x = mouseX;
+        ourGraph.Graph[clickedCirc].y = mouseY;
+
+    }
+    else{
+        // Means User trying to move the window
+    }
+}
 function draw() {
     background(210);
     ourGraph.displayGraph();
+
 }
