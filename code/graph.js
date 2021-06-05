@@ -15,8 +15,6 @@ function node(x,y,number){
     obj.y = y;
     obj.number = number;
     obj.friends = [];
-    obj.friendDist = []; // This will be the distance between friend and node
-    obj.friendAngle = []; // This will be the angle between friend and node
     return obj;
 }
 
@@ -30,17 +28,6 @@ function graph(){
 
     this.makeFriend = function(i,j){ // It means to add a connection from graph[i] to graph[j]
         this.Graph[i].friends.push(j);
-
-        let friend = this.Graph[j];
-        this.Graph[i].friendDist.push( dist(friend.x,friend.y,this.Graph[i].x,this.Graph[i].y) );
-
-        let angle = atan2(friend.y - this.Graph[i].y,friend.x - this.Graph[i].x);
-        /* These Are comments for debugging purpose if i have to change something in future
-         console.log(this.Graph[i].x - friend.x);
-         console.log(this.Graph[i].y - friend.y);
-         console.log(degrees(angle) );
-        */
-        this.Graph[i].friendAngle.push(angle);
     }
     this.drawArrow = function(x,y,angle){ // A simple function to draw arrow
         push();
@@ -87,7 +74,7 @@ function graph(){
             dBtwP is Distance Between Points [Current point and friend point]
             radi is radius of each circle
             */
-            let dBtwP = this.Graph[i].friendDist[j];
+            let dBtwP = dist(friend.x,friend.y,this.Graph[i].x,this.Graph[i].y);
             let radi = nodeDiam / 2;
             let lineEndX = (dBtwP - radi) * (friend.x - this.Graph[i].x) / dBtwP;
             let lineEndY = (dBtwP - radi) * (friend.y - this.Graph[i].y) / dBtwP;
@@ -97,8 +84,14 @@ function graph(){
             line(0, 0, lineEndX,lineEndY);
 
             // Now Drawing the arrow
-            let arrowAngle = radians(180) + this.Graph[i].friendAngle[j];
+            let arrowAngle = radians(180) + atan2(friend.y - this.Graph[i].y,friend.x - this.Graph[i].x);
             this.drawArrow(lineEndX,lineEndY,arrowAngle);
+
+            /* These Are comments for debugging purpose if i have to change something in future
+                console.log(this.Graph[i].x - friend.x);
+                console.log(this.Graph[i].y - friend.y);
+                console.log(degrees(angle) );
+            */
         }
         pop();
 
