@@ -8,6 +8,7 @@ let selected = -1;
 let arrowSize = nodeDiam/6;
 let tracingKey = 17; // Control Key Code
 let makeFriendKey = 16; // Shift Key Code
+let windowMovingKey = 32; // SpaceBar Key Code
 
 function node(x,y,number){
     const obj = {};

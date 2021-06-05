@@ -1,6 +1,8 @@
 let ourGraph = new graph();
 let ourStack = [];
 let clickedCirc = -1; // Clicked Circle
+let windowPos = [0,0];
+let mouseOldPos = [];
 
 /*
 The stack will hold to tracking action [It will be used to undo and redo] 
@@ -14,6 +16,14 @@ function setup() {
 }
 
 function mousePressed() {
+    mouseX -= windowPos[0];
+    mouseY -= windowPos[1];
+    if(keyIsDown(windowMovingKey)){
+        // This means that user is trying to move window
+        mouseOldPos = [mouseX,mouseY];
+        return;
+    }
+
     clickedCirc = -1;
     for(let i = 0; i < ourGraph.Graph.length; i++){
         let nod = ourGraph.Graph[i];
@@ -84,17 +94,24 @@ function keyPressed() {
 
 function mouseDragged() {
     /*This is the code for moving the window or a circle*/
-    if(clickedCirc != -1){
-        // Means User trying to move a circle
-        ourGraph.Graph[clickedCirc].x = mouseX;
-        ourGraph.Graph[clickedCirc].y = mouseY;
+
+    // Means User trying to move the window
+    if(keyIsDown(windowMovingKey)){
+        windowPos[0] = [mouseX - mouseOldPos[0]];
+        windowPos[1] = [mouseY - mouseOldPos[1]];
 
     }
     else{
-        // Means User trying to move the window
+        if(clickedCirc != -1 ){
+            // Means User trying to move a circle
+            ourGraph.Graph[clickedCirc].x = mouseX;
+            ourGraph.Graph[clickedCirc].y = mouseY;
+    
+        }
     }
 }
 function draw() {
+    translate(windowPos[0],windowPos[1]);
     background(210);
     ourGraph.displayGraph();
 
