@@ -1,15 +1,11 @@
 let ourGraph = new graph();
 let ourStack = [];
-let curActionI = -1;
 /*
 The stack will hold to tracking action [It will be used to undo and redo] 
-CurActionI will be the length of ourStack but when undo will occur then we will subtract it by 1 if it is greater than 0 and when reundo will occur then we will add 1 to it.
 */
 
 function addInStack(value){
-    ourStack.splice(curActionI+1,);
     ourStack.push(value);
-    curActionI++;
 }
 function setup() {
     createCanvas(window.innerWidth, window.innerHeight);
@@ -33,21 +29,18 @@ function mouseClicked() {
             if(clickedCirc == selected ){
                 selected = -1;
             }
-            else if(ourGraph.Graph[selected].friends.indexOf(clickedCirc) != -1) {
-                // It means it clicked on the circle that is already its friend
-                selected = clickedCirc;
+            else if(ourGraph.Graph[selected].friends.indexOf(clickedCirc) == -1 
+                    && keyIsDown(CONTROL)) {
+                    /* It means it clicked on the circle that is not its friend and 
+                    control is pressed then it will make friend and make a line to 
+                    the circle that is selected */
+                    ourGraph.makeFriend(selected,clickedCirc);
+                    addInStack(selected);
             }
             else{
-                // Otherwise it will make friend and make a line to the circle that is selected
-                ourGraph.makeFriend(selected,clickedCirc);
-                addInStack(selected);
-
-                if(keyIsDown(CONTROL)){
-                    // If control button is pressed then the node that is friend will be selected
-                    selected = clickedCirc;
-                }
-
+                selected = clickedCirc;
             }
+
         }
     }
     else{
@@ -58,9 +51,9 @@ function mouseClicked() {
     }
 }
 function keyPressed() {
-    if (keyIsDown(CONTROL) && keyCode == 90 && curActionI != -1) {
+    if (keyIsDown(CONTROL) && keyCode == 90 && ourStack.length != 0) {
         // KeyCode 90 is Z And it means Crtl + Z is pressed
-        let lastNodeModified = ourStack[curActionI];
+        let lastNodeModified = ourStack[ourStack.length - 1];
 
         if(ourGraph.Graph[lastNodeModified].friends.length == 0 ){
             ourGraph.Graph.pop();
@@ -68,7 +61,7 @@ function keyPressed() {
         else{
             ourGraph.Graph[lastNodeModified].friends.pop();
         }
-        curActionI--;
+        ourStack.pop();
     }
     lastKeyPressed = keyCode;
 }
