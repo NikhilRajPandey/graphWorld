@@ -11,13 +11,19 @@ function setup() {
     createCanvas(window.innerWidth, window.innerHeight);
 }
 
-function mouseClicked() {
+function mousePressed() {
     let clickedCirc = -1;
     for(let i = 0; i < ourGraph.Graph.length; i++){
         let nod = ourGraph.Graph[i];
-        if( dist(nod.x,nod.y,mouseX,mouseY) <= nodeDiam/2){
+        let distance = dist(nod.x,nod.y,mouseX,mouseY);
+
+        if( distance <= nodeDiam/2){ // This means that we clicked on a circle
             clickedCirc = i;
             break;
+        }
+        else if(distance <= nodeDiam){
+            /* This means that we clicked nearby a circle and we can't make a circle there thus returning from this function*/
+            return;
         }
     }
 
@@ -29,13 +35,20 @@ function mouseClicked() {
             if(clickedCirc == selected ){
                 selected = -1;
             }
-            else if(ourGraph.Graph[selected].friends.indexOf(clickedCirc) == -1 
-                    && keyIsDown(CONTROL)) {
+            /* By Default TracingKey is CONTROL and makeFriendKey is SHIFT Declared in graph.js*/
+
+            else if(ourGraph.Graph[selected].friends.indexOf(clickedCirc) == -1
+             && (keyIsDown(tracingKey) || keyIsDown(makeFriendKey) ) ) {
                     /* It means it clicked on the circle that is not its friend and 
-                    control is pressed then it will make friend and make a line to 
+                    tracingKey or makeFriendKey is pressed then it will make friend and make a line to 
                     the circle that is selected */
                     ourGraph.makeFriend(selected,clickedCirc);
                     addInStack(selected);
+                    
+                    if(keyIsDown(tracingKey)){
+                        // If tracingKey is down then also selecting the circle that we have clicked
+                        selected = clickedCirc;
+                    }
             }
             else{
                 selected = clickedCirc;
@@ -54,7 +67,8 @@ function keyPressed() {
     if (keyIsDown(CONTROL) && keyCode == 90 && ourStack.length != 0) {
         // KeyCode 90 is Z And it means Crtl + Z is pressed
         let lastNodeModified = ourStack[ourStack.length - 1];
-
+        
+        // Undoing the last change
         if(ourGraph.Graph[lastNodeModified].friends.length == 0 ){
             ourGraph.Graph.pop();
         }
