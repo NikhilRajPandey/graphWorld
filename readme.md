@@ -9,7 +9,7 @@ To make a line to the circle `Shift` + Click
 To make a line and selecting the circle `Ctrl` + Click
 
 # Clip
-<video width="640" height="480" autoplay>
+<video width="640" height="480" autoplay controls>
     <source src="video/screenRecorded.mp4">
 </video>
 
