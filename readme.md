@@ -9,7 +9,9 @@ To make a line to the circle `Shift` + Click
 To make a line and selecting the circle `Ctrl` + Click
 
 # Clip
-![Video](video/screenRecorded.mp4)
+<video width="640" height="480" autoplay>
+    <source src="video/screenRecorded.mp4">
+</video>
 
 # Contributor
 Nikhil Raj Pandey [15 Years Old]
